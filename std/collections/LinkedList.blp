@@ -1,0 +1,47 @@
+pack std::collections::LinkedList{
+  
+  import package::AbstractCollections;
+  import package::utility::SmartPointer;
+  import package::iterable::*;
+
+  /*
+    A note on Global generics: These are global to the package, so I can redefine
+    it in a different file. These cannot be exported.
+  */
+  
+  global generic<LinkType>;
+
+
+  comp Node<global.LinkType>{
+    pub SmartPointer<Node> prev;
+    pub SmartPointer<Node> next;
+    pub LinkType data;
+  };
+
+  obj LinkedList<global.LinkType>: pub AbstractCollections<LinkType> {
+    priv SmartPointer<Node<global.LinkType>> front;
+    priv SmartPointer<Node<global.LinkType>> end;
+
+
+    pub con(data: global.LinkType) => void;
+    
+    override pub defun forEach(c: Consumer::Consumer<CollectType>) => void;
+    
+    override pub defun getFirst() => global.LinkType;
+    override pub defun getLast() => global.LinkType;
+    override pub defun getPos(pos: Integer) => global.LinkType;
+
+    override pub defun push(data: global.LinkType) => void;
+    override pub defun insert(pos: Integer, pol: Uint8, data: global.LinkType) => void;
+    override pub defun append(data: global.LinkType) => void;
+
+    override pub defun delete() => *void;
+    override pub defun getSize() => Size_a;
+  };
+
+  LinkedList::con(data: global.LinkType) => void{
+    front => new Node<global.LinkType>;
+    
+  }
+
+};

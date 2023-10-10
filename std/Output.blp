@@ -1,0 +1,134 @@
+@use CHILD_ARCH;
+@start NO_MAIN;
+
+[@!NO_CHILD_INCLUDE]
+
+/*
+  While I'm doing this:
+  Naming Conventions:
+  @alias typedefs: should be name + _a; ex:
+    @alias unsigned long size_a;
+  objects: should be PascalCase; ex: 
+    obj SomeObject;
+    comp SomeComposition;
+    union SomeUnion;
+    type SomeType;
+  variables: should be camelCase; ex:
+    Integer someInteger;
+    Int8 someChar;
+    Uint8 someByte;
+    String someStr;
+  functions should be camelCase as well; ex:
+    defun someFunction() => void;
+  constants should be SCREAMING_SNAKE_CASE; ex:
+    @def SOME_CONSTANT 5;
+    static const Integer SOME_OTHER_CONSTANT = 5;
+  package names should be PascalCase, main should be camelCase; ex:
+    MyLibrary.blp
+    main.blp
+*/
+
+/*
+  Package hirarchy:
+  this goes into the main directory, for example:
+    any package with the root std can acsess any other package in that
+    even if:
+    std
+    |  |--collections
+    |  |    |--Vector.blp
+    |  |    |--List.blp
+    |  |--output
+    |  |    |--Output.blp
+    |  |    |--FileWriter.blp
+    I can acesss Vector from Output because the package system
+    comes from the root (std)
+    to acess Vector from Output you type this:
+    import package::collections::Vector;
+    in Output.blp
+*/
+
+/*
+  unless specified by the export keyword, the default export
+  for packages is the object that is the package name; ex:
+  the package Output has the object "Output" as its default export
+  if you do this along with the Output object:
+  export obj Writer{};
+  then you export both the object "Writer" and the object "Output"
+*/
+
+
+
+
+pack std::Output {
+  @def __WIN_32 0
+  @def __LINUX__ 1
+  @def __IOS__ 2
+
+  import lang::{Object, IntegerObject, Primitive};
+  import package::collections::LinkedList;
+
+  @eval (CHILD_ARCH ==> x86):
+    external "asm/x86/output.asm" _print(s: String) => Integer;
+    external "asm/x86/output.asm" _exit() => Integer;
+  @end;
+
+  @eval (CHILD_ARCH ==> ARM):
+    external "asm/arm/output.asm" _print(s: String) => Integer;
+    external "asm/arm/output.asm" _exit() => Integer;
+  @end;
+
+  @eval (CHILD_ARCH ==> AVR):
+    external "asm/avr/output.asm" _print(s: String) => Integer;
+    external "asm/avr/output.asm" _exit() => Integer;
+    external "asm/avr/output.asm" _set_baud(baud: unsigned Long) => void;
+    external "asm/avr/output.asm" _init_UART() = void;
+  @end;
+
+  obj Output: pub Object{
+    pub static const Integer Console = 0;
+
+    priv const String[4] specifiers => {"%s", "%i", "%f", "%o"};
+    priv LinkedList<Integer> exitCodes => new LinkedList<Integer>();
+
+    priv Integer out;
+
+    pub con(out: Integer) => void;
+
+    @eval(CHILD_ARCH ==> AVR):
+      pub con(out: Integer, baud: unsigned Long) => void;
+      pub defun getBaud() => unsigned Long;
+    @end;
+
+    generic<Out: pub Primitive>
+    pub defun println(ln: Out) => void {
+      StringObj str => new StringObj(ln.asString());
+      _print(str.append("\n\0").asString());
+      Integer exitCode => _exit();
+      exitCodes.append(exitCode);
+      ret;
+    }
+
+    generic<Out: pub Primitive>
+    pub defun print(ln: Out) => void{}
+
+
+    pub defun printFormatted(ln: String, ...) => void;
+    pub defun clear() => void;
+    pub defun flush() => void;
+    pub defun writeByte(byte: Uint8) => void;
+    pub defun writeBytes(bytes: Uint8[]) => void;
+    pub defun getOutput() => Integer;
+    pub decon() => void;
+  };
+
+  Output::con(out: Integer) => void{
+    this->out => out; 
+    ret;
+  }
+
+  defun Output::printFormatted(ln: String, argc: Integer, ...) => void{
+    StringObj str => new StringObj(ln);
+    
+  }
+  
+};

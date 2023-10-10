@@ -1,0 +1,11 @@
+pack std::iterable::Function {
+
+  generic<Funct(Args...)> obj Function;
+
+  generic<_Ret, Args...>
+  obj Function<(args: &Args...) => _Ret>{
+    pub con(args: &Args...) => void;
+    pub decon() => void;
+  };
+  
+};

@@ -1,0 +1,51 @@
+pack std::utility::SmartPointer {
+  @def nullptr (void*)0;
+  @def NULL nullptr
+
+  import package::collections::AbstractCollections::Size_a;
+  
+  global generic<Pointer>;
+
+
+  obj SmartPointer<global.Pointer>{
+    priv Pointer* ptr;
+    pub con(ptr: *Pointer = NULL) => void;
+    pub defun operator->() => &Pointer;
+    pub defun operator*() => *Pointer;
+    pub defun operator[](pos: Integer) => Pointer;
+    pub defun operator new(pointer: Pointer) => self;
+    pub defun unwrap() => *Pointer;
+    pub decon() => void;
+  };
+
+
+  SmartPointer<global.Pointer>::con(ptr: *Pointer = NULL) => void{
+    this->ptr = (ptr == NULL) ? ptr : new *Pointer;
+  }
+
+  defun SmartPointer<global.Pointer>::operator->() => &global.Pointer{
+    ret this->*ptr;
+  }
+
+  defun SmartPointer<global.Pointer>::operator*() => *global.Pointer{
+    ret ptr;
+  }
+
+  defun SmartPointer<global.Pointer>::operator[](pos: Integer) => Pointer{
+    ret ptr[pos];
+  }
+
+  defun SmartPointer<global.Pointer>::operator new(pointer: global.Pointer) => Self{
+    global.Pointer *ptr => &pointer;
+    ret new SmartPointer<global.Pointer>(ptr);
+  }
+
+
+  defun SmartPointer<global.Pointer>::unwrap() => *global.Pointer{
+    ret this->ptr;
+  }
+
+  SmartPointer<global.Pointer>::decon() => void{
+    dealloc ptr;
+  }
+};

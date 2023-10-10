@@ -1,0 +1,22 @@
+pack StringObj{
+  
+  obj StringObj{
+    priv Char[]? char;
+    priv String? str;
+
+    pub con(str: char[]) => void;
+    pub con(str: String) => void;
+
+
+    pub defun insert(pos: Integer, pol: Uint8, data: String) => void;
+
+    
+
+    pub decon() => void;
+
+  };
+
+  StringObj::decon() => void{
+
+  }
+};

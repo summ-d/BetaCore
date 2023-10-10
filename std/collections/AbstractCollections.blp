@@ -1,0 +1,28 @@
+pack std::collections::AbstractCollections{
+
+  export @alias unsigned Long Size_a;
+
+  import pack::iterable::{Consumer, Function};
+
+  generic<CollectType, ExtraType = CollectType>
+  abstract obj AbstractCollections {
+    pub defun forEach(c: Consumer<CollectType>) => void;
+    
+    // Does some fancy stuff to check whether ExtraType is used or not
+    pub defun forEach(c: Consumer<ExtraType>) => void; 
+
+    pub defun getFirst() => CollectType;
+    pub defun getLast() => CollectType;
+    pub defun getPos(pos: Integer) => CollectType;
+
+    pub defun push(data: CollectType) => void;
+    pub defun insert(pos: Integer, pol: Uint8, data: CollectType) => void;
+    pub defun append(data: CollectType) => void;
+
+    
+
+    pub defun delete() => *void;
+    pub defun getSize() => Size_a;
+  };
+  
+};
