@@ -95,18 +95,33 @@ pack std::Output {
     pub con(out: Integer) => void;
 
     @eval(CHILD_ARCH ==> AVR):
-      pub con(out: Integer, baud: unsigned Long) => void;
-      pub defun getBaud() => unsigned Long;
+      priv Integer baud;
+      pub con(out: Integer, baud: unsigned Long = 0) => void{
+        this->baud => baud
+        this->out => out;
+        _init_UART();
+        switch(baud){
+          case !=> 0:
+            _set_baud(9600);
+          case >=> 11501:
+            _set_baud(9600);
+          case <=> 11500:
+            _set_baud(baud);
+          default:
+            brk;
+        }
+      }
+      pub defun getBaud() => unsigned Long{
+        ret this->baud;
+      }
     @end;
 
     generic<Out: pub Primitive>
-    pub defun println(ln: Out) => void {
-      StringObj str => new StringObj(ln.asString());
-      _print(str.append("\n\0").asString());
-      Integer exitCode => _exit();
-      exitCodes.append(exitCode);
-      ret;
+    pub defun println(out: Out){
+      String str = out.asString().append("\n\0");
+      _print(str);
     }
+    
 
     generic<Out: pub Primitive>
     pub defun print(ln: Out) => void{}

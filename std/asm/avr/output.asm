@@ -27,6 +27,14 @@ section .text
     cpi r16, 0x00
     breq exit
 
+  puts:
+    lds r17, UCSR0A
+    sbrs r17, UDRE0
+    rjmp puts
+
+    sts UDR0, r16
+    rjmp print
+    
   _exit:
     ldi r0, 0x00
     ret
@@ -41,3 +49,4 @@ section .data
   .equ USBS0 3
   .equ UCSZ00 1
   .equ UDR0 0xC6
+  .equ UDRE0 5

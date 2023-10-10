@@ -1,0 +1,61 @@
+@use CHILD_ARCH;
+@start NO_MAIN;
+
+[@!NO_CHILD_INCLUDE]
+
+pack lang::Primitive{
+
+  //export external "typediscriptor.hpp" comp TypeDiscriptor; 
+
+
+  // Export block: acessed using packageName::**::FileName::ExportBlockName;
+  export Types {
+    @alias unsigned Short Uint16;
+    @alias unsigned Integer Uint32;
+    @alias Short Int16;
+    @alias Integer Int32;
+    @alias unsigned Long Uint64;
+    @alias Long Int64;
+  }
+
+  generic<Prim>
+  abstract obj Primitive{
+    pub con(primitive: Prim) => void;
+    pub defun asString() => String;
+    pub defun getUnderling() => Prim;
+    pub defun getType() => TypeDiscriptor;
+    pub defun operator ==(p1: &const Primitive<Prim>, p2: &const Primitive<Prim>) => const Boolean;
+    pub defun clone() => Self;
+    pub defun createNewInstance() => Prim;
+  };
+
+  /* can extend primitive types, for example: 
+     even though Integer is a primitive type, and not
+     a object, anonomus objects can make this possible.
+     If you import this file, you will be able to invoke these
+     Methods
+     
+  */
+
+
+  generic<Num>
+  export obj Number: pub Integer, pub Double, pub Float, pub Long, pub Uint8, pub Int8, pub Short, pub Primitive<Num>{
+    priv Integer underlying;
+
+    override pub con(primitive: Num) => void;
+    override pub defun asString() => String;
+    override pub defun getUnderlying() => Num;
+    override pub defun getType() => TypeDiscriptor;
+    override pub defun operator ==(p1: &const Primitive<Num>, 
+                                   p2: &const Primitive<Num>) => const Boolean;
+    override pub defun clone() => Self;
+    override pub defun createNewInstance() => Num;
+    
+    pub decon() => void;
+  };
+
+  export obj Str: pub String, pub Char[], pub Primitive<String>{
+    
+  };
+  
+}
