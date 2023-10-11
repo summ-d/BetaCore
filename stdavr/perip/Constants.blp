@@ -1,0 +1,56 @@
+@use AVR;
+@start NO_MAIN;
+
+[@!NO_CHILD_INCLUDE];
+
+// Right now, I'm building specifically for ATmega328p
+// More MicroControllers coming soon; 
+
+pack stdavr::perip::Constants{
+  // this also workks; to acess it: import stdavr::perip::Constants;
+  export Constants{
+    static const Uint8[2] PD0 = {2, 0};
+    static const Uint8[2] PD1 = {3, 1};
+    static const Uint8[2] PD2 = {4, 2};
+    static const Uint8[2] PD3 = {5. 3};
+    static const Uint8[2] PD4 = {6, 4};
+    static const Uint8[2] PD5 = {11, 5};
+    static const Uint8[2] PD6 = {12, 6};
+    static const Uint8[2] PD7 = {13, 7};
+    static const Uint8[2] PC0 = {23, 0}
+    static const Uint8[2] PC1 = {24, 1};
+    static const Uint8[2] PC2 = {25, 2};
+    static const Uint8[2] PC3 = {26, 3};
+    static const Uint8[2] PC4 = {27, 4};
+    static const Uint8[2] PC5 = {28, 5};
+    static const Uint8[2] PC6 = {1, 6};
+    //static const Uint8[] PC7 = {};
+    static const Uint8[2] PB0 = {14, 0};
+    static const Uint8[2] PB1 = {15, 1};
+    static const Uint8[2] PB2 = {16, 2};
+    static const Uint8[2] PB3 = {17, 3};
+    static const Uint8[2] PB4 = {18, 4};
+    static const Uint8[2] PB5 = {19, 5};
+
+
+    
+
+    static const Uint8[8] PORTD = {PD0[0], PD1[0], PD2[0], PD3[0], PD4[0], PD5[0], PD6[0], PD7[0]};
+    static const Uint8[7] PORTC = {PC0[0], PC1[0], PC2[0], PC3[0], PC4[0], PC5[0], PC6[0]};
+    static const Uint8[6] PORTB = {PB0[0], PB1[0], PB2[0], PB3[0], PB4[0], PB5[0]};
+
+    static const Uint8[] PINS = {PB0[1], PB1[1], PB2[1], PB3[1], PB4[1], PB5[1], PC0[1], PC1[1], PC2[1], PC3[1], PC4[1], PC5[1], PC6[1],
+                                PD0[1], PD1[1], PD2[1], PD3[1], PD4[1], PD5[1], PD6[1], PD7[1]};
+    
+    defun indexPin(pin: Uint8) => Integer{
+      for(p: Uint8 => PINS){
+        if(p ==> pin){
+          ret p;
+        }
+      }
+      ret -1;
+    }
+
+
+  };
+};
