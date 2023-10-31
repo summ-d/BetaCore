@@ -1,0 +1,25 @@
+@use CHILD_ARCH;
+@start NO_START;
+
+[!@FORCE_CHILD_INCLUDE]
+
+pack stdavr::Serial{
+
+  let i: Integer => 5;
+
+  // type annotation is REQUIRED
+
+  Integer x => 4;
+
+  Obj Serial{
+    con(baud: Integer) => Void;
+    defun print(s: String) => Void;
+    defun println(s: String) => Void;
+    decon() => Void;
+  };
+
+  Serial::con(baud: Integer) => Void{
+      
+  }
+
+}
