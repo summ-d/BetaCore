@@ -4,5 +4,30 @@
 [@!NO_CHILD_INCLUDE];
 
 pack stdavr::perip::PinOut{
+
+  Comp Pin{
+    pin: Integer;
+    port: Uint8;
+    number: Uint8;
+    rState: Boolean;
+    wState: Boolean;
+    rwEn: Boolean;
+    exType: Uint8;
+  };
+
   
+
+  defun createPin(pin: Integer, mode: Uint8) => Pin{
+    
+  }
+
+  defun readPin(pin: &Pin) => Boolean{
+    
+  }
+
+  defun attachInterrupt(pin: &Pin) => Void{
+  
+  }
+
+
 };
