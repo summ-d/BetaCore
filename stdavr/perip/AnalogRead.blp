@@ -1,0 +1,25 @@
+@use AVR;
+@start NO_START;
+
+@include "PinOut.blp"
+
+[!@FORCE_CHILD_INCLUDE];
+
+pack stdavr::perip::AnalogRead{
+
+  Comp AnalogPin: pub PinOut::Pin {
+    value: Uint16;
+  };
+  
+  defun createAnalogPin(pin: Integer) => AnalogPin{
+      let p: PinOut::Pin => PinOut::createPin(pin, INPUT);
+      let aP: AnalogPin => p;
+      aP.value = 0;
+      ret aP;
+  };   
+
+  defun readPin(aP: &AnalogPin) => Uint16{
+    
+  } 
+
+}
