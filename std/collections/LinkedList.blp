@@ -13,20 +13,23 @@ pack std::collections::LinkedList{
 
   /*
     comp vs. obj:
-    comp can only hold variables, much like a C style struct
+    comp can only hold variables, much like a C-style struct
     obj can hold both variables and member functions
   */
 
-  comp Node<global.LinkType>{
-    pub SmartPointer<Node> prev;
-    pub SmartPointer<Node> next;
-    pub LinkType data;
+  Comp Node<T>
+
+  Comp Node<global.LinkType>{
+    let pub prev: SmartPointer<Node>;
+    let pub next: SmartPointer<Node>;
+    let pub data: global.Linktype;
   };
 
-  obj LinkedList<global.LinkType>: pub AbstractCollections<LinkType> {
-    priv SmartPointer<Node<global.LinkType>> front;
-    priv SmartPointer<Node<global.LinkType>> end;
+  Obj LinkedList<T>: pub AbstractCollections<T>;
 
+  Obj LinkedList<global.LinkType>: pub AbstractCollections<global.LinkType> {
+    let front: SmartPointer<Node<global.LinkType>>;
+    let back: SmartPointer<Node<global.LinkType>>;
 
     pub con(data: global.LinkType) => void;
     
@@ -44,9 +47,8 @@ pack std::collections::LinkedList{
     override pub defun getSize() => Size_a;
   };
 
-  LinkedList::con(data: global.LinkType) => void{
-    front => new Node<global.LinkType>;
-    
+  Obj LinkedList::con(data: global.LinkType) => void{
+    front => new Node<global.LinkType>; 
   }
 
 };
