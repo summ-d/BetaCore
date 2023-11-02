@@ -14,24 +14,23 @@
     union SomeUnion;
     type SomeType;
   variables: should be camelCase; ex:
-    Integer someInteger;
-    Int8 someChar;
-    Uint8 someByte;
-    String someStr;
+    let someInteger: Integer = 5;
+    let someChar: Char = 'a';
+    let someString: String = "Hello"
   functions should be camelCase as well; ex:
-    defun someFunction() => void;
+    defun someFunction() => Void;
   constants should be SCREAMING_SNAKE_CASE; ex:
     @def SOME_CONSTANT 5;
-    static const Integer SOME_OTHER_CONSTANT = 5;
+    let SOME_OTHER_CONSTANT: unsigned constant Integer = 5;
   package names should be PascalCase, main should be camelCase; ex:
     MyLibrary.blp
     main.blp
 */
 
 /*
-  Package hirarchy:
+  Package hierarchy:
   this goes into the main directory, for example:
-    any package with the root std can acsess any other package in that
+    any package with the root std can access any other package in that
     even if:
     std
     |  |--collections
@@ -40,9 +39,9 @@
     |  |--output
     |  |    |--Output.blp
     |  |    |--FileWriter.blp
-    I can acesss Vector from Output because the package system
+    I can access Vector from Output because the package system
     comes from the root (std)
-    to acess Vector from Output you type this:
+    to access Vector from Output you type this:
     import package::collections::Vector;
     in Output.blp
 */
@@ -52,7 +51,7 @@
   for packages is the object that is the package name; ex:
   the package Output has the object "Output" as its default export
   if you do this along with the Output object:
-  export obj Writer{};
+  export Obj Writer{};
   then you export both the object "Writer" and the object "Output"
 */
 
@@ -85,55 +84,34 @@ pack std::Output {
   @end;
 
   obj Output: pub Object{
-    pub static const Integer Console = 0;
+    let pub CONSOLE: static constant Uint8 => 0;
 
-    priv const String[4] specifiers => {"%s", "%i", "%f", "%o"};
-    priv LinkedList<Integer> exitCodes => new LinkedList<Integer>();
+    let priv specifiers: static constant String => {"%s", "%i", "%f", "%o"};
+    let priv exitCodes: LinkedList<Integer> => new LinkedList<Integer>();
 
     priv Integer out;
 
     pub con(out: Integer) => void;
 
-    @eval(CHILD_ARCH ==> AVR):
-      priv Integer baud;
-      pub con(out: Integer, baud: unsigned Long = 0) => void{
-        this->baud => baud
-        this->out => out;
-        _init_UART();
-        switch(baud){
-          case !=> 0:
-            _set_baud(9600);
-          case >=> 11501:
-            _set_baud(9600);
-          case <=> 11500:
-            _set_baud(baud);
-          default:
-            brk;
-        }
-      }
-      pub defun getBaud() => unsigned Long{
-        ret this->baud;
-      }
-    @end;
 
     generic<Out: pub Primitive>
-    pub defun println(out: Out){
-      String str = out.asString().append("\n\0");
+    pub defun println(out: Out) => Void{
+      let str: String => out.asString().append("\n\0");
       _print(str);
     }
     
 
     generic<Out: pub Primitive>
-    pub defun print(ln: Out) => void{}
+    pub defun print(ln: Out) => Void{}
 
 
-    pub defun printFormatted(ln: String, ...) => void;
-    pub defun clear() => void;
-    pub defun flush() => void;
-    pub defun writeByte(byte: Uint8) => void;
-    pub defun writeBytes(bytes: Uint8[]) => void;
+    pub defun printFormatted(ln: String, ...) => Void;
+    pub defun clear() => Void;
+    pub defun flush() => Void;
+    pub defun writeByte(byte: Uint8) => Void;
+    pub defun writeBytes(bytes: Uint8[]) => Void;
     pub defun getOutput() => Integer;
-    pub decon() => void;
+    pub decon() => Void;
   };
 
   Output::con(out: Integer) => void{
@@ -142,7 +120,7 @@ pack std::Output {
   }
 
   defun Output::printFormatted(ln: String, argc: Integer, ...) => void{
-    StringObj str => new StringObj(ln);
+    let str: String => 
     
   }
   
