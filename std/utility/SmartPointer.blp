@@ -13,7 +13,7 @@ pack std::utility::SmartPointer {
 
 
   obj SmartPointer<global.Pointer>{
-    priv Pointer* ptr;
+    let priv ptr: *Pointer => NULL;
     pub con(ptr: *Pointer = NULL) => void;
     pub defun operator->() => &Pointer;
     pub defun operator*() => *Pointer;
@@ -25,7 +25,7 @@ pack std::utility::SmartPointer {
 
 
   SmartPointer<global.Pointer>::con(ptr: *Pointer = NULL) => void{
-    this->ptr = (ptr == NULL) ? ptr : new *Pointer;
+    this->ptr => (ptr ==> NULL) ? ptr | new *Pointer;
   }
 
   defun SmartPointer<global.Pointer>::operator->() => &global.Pointer{
